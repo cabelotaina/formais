@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from constantes import *
-from copy import deepcopy
+from Grafo import Grafo
 
 class AutomatoFinito:
     def __init__(self, gramatica=None, expressao_regular=None):
@@ -54,7 +54,7 @@ class AutomatoFinito:
         raise NotImplementedError
 
     def minimo(self):
-        # minimizar o autômato usand o reverso e determinístico
+        # minimizar o autômato usand o reverso e determinístico (algoritmo de Brzozowski)
         raise NotImplementedError
 
     def eh_igual(self, outro_automato):
@@ -95,9 +95,30 @@ class AutomatoFinito:
 
         return NovoAutomato
 
-    def enumerar_sentencas(self, tamanho):
-        raise NotImplementedError
+    def enumerar_sentencas(self, tamanho=0):
+        # obtem todas as sentencas que podem ser geradas em um passo a partir do estado inicial
+        # juntamente como o estado de destino ao se derivar do estado inicial com o simbolo em questao
 
-    def determinar_finitude(self):
-        # verificar se é melhor fazer assim ou criar três métodos vazia/finita/infinita
-        raise NotImplementedError
+        duplas = { (self.estado_inicial, simbolo) for simbolo in self.alfabeto }
+        # a cada iteração, obtém sentencas de tamanho i
+        for i in range(1, tamanho):
+            novas_duplas = set()
+            for estado_atual, sentenca in duplas:
+                for ((estado, simbolo), proximos_estados) in self.transicoes.iteritems():
+                    for proximo_estado in proximos_estados:
+                        if estado_atual == estado:
+                            novas_duplas.add((proximo_estado, sentenca + simbolo))
+            duplas = novas_duplas
+
+        # filtra as sentencas das duplas cujo estado for estado final
+        sentencas = { sentenca for estado_atual, sentenca in duplas if estado_atual in self.estados_finais }
+
+        return sentencas
+
+    def eh_vazio(self):
+        grafo = Grafo(automato=self)
+        return not grafo.existe_caminho_entre_vertices(self.estado_inicial, self.estados_finais)
+
+    def eh_finito(self):
+        grafo = Grafo(automato=self)
+        return not grafo.tem_ciclos(vertice_inicial=self.estado_inicial)

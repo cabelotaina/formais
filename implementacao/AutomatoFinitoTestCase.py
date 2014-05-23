@@ -4,7 +4,6 @@ import unittest
 from AutomatoFinito import AutomatoFinito
 from constantes import *
 
-
 class EstruturaAutomatoFinitoTestCase(unittest.TestCase):
 
     def setUp(self):
@@ -33,7 +32,8 @@ class EstruturaAutomatoFinitoTestCase(unittest.TestCase):
 class AlgoritmosAutomatoFinitoTestCase(unittest.TestCase):
 
     def test_gerar_automato_a_partir_de_gramatica(self):
-        automato_em_teste = AutomatoFinito(gramatica='S -> aS | a | bA \nA -> aA | a | bS')
+        automato_em_teste = AutomatoFinito(gramatica='S -> aS | a | bA'
+                                                   '\nA -> aA | a | bS')
 
         transicoes = {}
         transicoes[('S', 'a')] = { 'S', estado_final_algoritmo_gramatica }
@@ -75,6 +75,11 @@ class AlgoritmosAutomatoFinitoTestCase(unittest.TestCase):
         self.assertEquals(automato_reverso.estado_inicial, estado_final_algoritmo_gramatica)
         self.assertEquals(automato_reverso.estados_finais, { 'S' })
 
+    def test_enumerar_sentencas(self):
+        automato = AutomatoFinito(gramatica='S -> aS | bS | a')
+
+        sentencas = { 'aaa', 'aba', 'baa', 'bba' }
+        self.assertSetEqual(automato.enumerar_sentencas(tamanho=3), sentencas)
 
 if __name__ == '__main__':
     unittest.main()
