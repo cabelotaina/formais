@@ -81,5 +81,13 @@ class AlgoritmosAutomatoFinitoTestCase(unittest.TestCase):
         sentencas = { 'aaa', 'aba', 'baa', 'bba' }
         self.assertSetEqual(automato.enumerar_sentencas(tamanho=3), sentencas)
 
+
+    def test_obter_automato_deterministico_equivalente(self):
+        automato_original = AutomatoFinito(gramatica='S -> aS | bB | cC | a | b | c'
+                                                   '\nB -> bB | cC | b | c'
+                                                   '\nC -> cC | c')
+
+        automato_original.obter_automato_deterministico_equivalente()
+
 if __name__ == '__main__':
     unittest.main()

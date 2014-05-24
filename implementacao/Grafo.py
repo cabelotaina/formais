@@ -9,7 +9,7 @@ class Grafo:
         vs = {}
 
         self.vertices = set()
-        self.atributos = { 'mapa_nomes_vertices' : vs }
+        self.atributos = { mapa_nomes_vertices : vs }
 
         for estado in automato.estados:
             vertice = Vertice(estado)
@@ -25,7 +25,7 @@ class Grafo:
 
     # busca um Vertice pelo nome
     def obter_vertice(self, nome):
-        return self.atributos['mapa_nomes_vertices'][nome]
+        return self.atributos[mapa_nomes_vertices][nome]
 
 
 
